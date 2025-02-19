@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Записульки</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+            integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+        <link rel="stylesheet" href="assets/css/main.css" />
+    </head>
+    <body>
+        <div class="app">
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h2>Записульки</h2>
+                    <button id="newNote" class="new-note-btn">
+                        <i class="fas fa-plus"></i> Новая запись
+                    </button>
+                </div>
+                <ul id="notesList">
+                    <li class="active" data-view="all">
+                        <i class="fas fa-book"></i> Все записи
+                    </li>
+                    <li data-view="favorites">
+                        <i class="fas fa-star"></i> Избранные
+                    </li>
+                    <li data-view="tags"><i class="fas fa-tags"></i> Теги</li>
+                </ul>
+                <div class="filters">
+                    <h3>Фильтры</h3>
+                    <select id="sortFilter">
+                        <option value="dateDesc">Сначала новые</option>
+                        <option value="dateAsc">Сначала старые</option>
+                        <option value="nameAsc">По названию А-Я</option>
+                        <option value="nameDesc">По названию Я-А</option>
+                    </select>
+                    <div class="tags-filter">
+                        <h4>Теги</h4>
+                        <div id="tagsFilterList"></div>
+                    </div>
+                </div>
+            </aside>
+
+            <main>
+                <div class="editor-view hidden">
+                    <header class="editor-header">
+                        <input
+                            type="text"
+                            id="noteTitle"
+                            placeholder="Название записи"
+                        />
+                        <div class="editor-controls">
+                            <button id="saveNote" title="Сохранить">
+                                <i class="fas fa-save"></i>
+                            </button>
+                            <button id="backToNotes" title="Закрыть">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            <button id="themeToggle" title="Сменить тему">
+                                <i class="fas fa-moon light-icon"></i>
+                                <i class="fas fa-sun dark-icon"></i>
+                            </button>
+                        </div>
+                    </header>
+                    <div class="editor-toolbar">
+                        <button data-command="bold" title="Жирный">
+                            <i class="fas fa-bold"></i>
+                        </button>
+                        <button data-command="italic" title="Курсив">
+                            <i class="fas fa-italic"></i>
+                        </button>
+                        <button data-command="underline" title="Подчеркнутый">
+                            <i class="fas fa-underline"></i>
+                        </button>
+                        <button
+                            data-command="strikeThrough"
+                            title="Зачеркнутый"
+                        >
+                            <i class="fas fa-strikethrough"></i>
+                        </button>
+                        <span class="separator">|</span>
+                        <button
+                            data-command="justifyLeft"
+                            title="По левому краю"
+                        >
+                            <i class="fas fa-align-left"></i>
+                        </button>
+                        <button data-command="justifyCenter" title="По центру">
+                            <i class="fas fa-align-center"></i>
+                        </button>
+                        <button
+                            data-command="justifyRight"
+                            title="По правому краю"
+                        >
+                            <i class="fas fa-align-right"></i>
+                        </button>
+                        <span class="separator">|</span>
+                        <button
+                            data-command="insertUnorderedList"
+                            title="Маркированный список"
+                        >
+                            <i class="fas fa-list-ul"></i>
+                        </button>
+                        <button
+                            data-command="insertOrderedList"
+                            title="Нумерованный список"
+                        >
+                            <i class="fas fa-list-ol"></i>
+                        </button>
+                        <span class="separator">|</span>
+                        <select id="fontSelect">
+                            <option value="Arial">Arial</option>
+                            <option value="Times New Roman">
+                                Times New Roman
+                            </option>
+                            <option value="Courier New">Courier New</option>
+                        </select>
+                        <select id="fontSizeSelect">
+                            <option value="1">Мелкий</option>
+                            <option value="3" selected>Обычный</option>
+                            <option value="5">Большой</option>
+                            <option value="7">Огромный</option>
+                        </select>
+                    </div>
+                    <div id="editor" contenteditable="true"></div>
+                    <div class="editor-footer">
+                        <div class="tags-input">
+                            <input
+                                type="text"
+                                id="tagInput"
+                                placeholder="Добавить тег (Enter)"
+                            />
+                            <input
+                                type="color"
+                                id="tagColor"
+                                value="#3b82f6"
+                                title="Выбрать цвет тега"
+                            />
+                            <div class="tags-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notes-view">
+                    <header>
+                        <h1>Записи</h1>
+                        <div class="header-controls">
+                            <div class="search-box">
+                                <input
+                                    type="text"
+                                    id="searchInput"
+                                    placeholder="Поиск заметок..."
+                                />
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <button id="loginBtn" class="auth-btn">
+                                Войти
+                            </button>
+                        </div>
+                    </header>
+                    <div class="notes-grid" id="notesContainer">
+                        <!-- Записи будут добавлены здесь динамически -->
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Модальное окно авторизации -->
+        <div id="loginModal" class="modal">
+            <div class="modal-content auth-modal">
+                <div class="modal-header">
+                    <h3>Вход</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form class="auth-form">
+                        <div class="form-group">
+                            <label for="loginEmail">Email</label>
+                            <input type="email" id="loginEmail" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Пароль</label>
+                            <input
+                                type="password"
+                                id="loginPassword"
+                                required
+                            />
+                        </div>
+                        <button type="submit" class="auth-submit">Войти</button>
+                    </form>
+                    <div class="auth-links">
+                        <span>Нет аккаунта? </span>
+                        <a class="show-register">Зарегистрироваться</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно регистрации -->
+        <div id="registerModal" class="modal">
+            <div class="modal-content auth-modal">
+                <div class="modal-header">
+                    <h3>Регистрация</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form class="auth-form">
+                        <div class="form-group">
+                            <label for="registerName">Имя</label>
+                            <input type="text" id="registerName" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="registerEmail">Email</label>
+                            <input type="email" id="registerEmail" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPassword">Пароль</label>
+                            <input
+                                type="password"
+                                id="registerPassword"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="passwordConfirmation"
+                                >Подтверждение пароля</label
+                            >
+                            <input
+                                type="password"
+                                id="passwordConfirmation"
+                                required
+                            />
+                        </div>
+                        <button type="submit" class="auth-submit">
+                            Зарегистрироваться
+                        </button>
+                    </form>
+                    <div class="auth-links">
+                        <span>Уже есть аккаунт? </span>
+                        <a class="show-login">Войти</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="toastContainer" class="toast-container"></div>
+        <script src="assets/js/script.js"></script>
+    </body>
+</html>;j
